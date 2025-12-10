@@ -3,14 +3,14 @@ Multivariable Linear Regression Project
 Assignment 6 Part 3
 
 Group Members:
-- 
+-Christopher Llinas-Aviles 
 - 
 - 
 - 
 
-Dataset: [Name of your dataset]
-Predicting: [What you're predicting]
-Features: [List your features]
+Dataset: [Energy Consumption]
+Predicting: [How much energy a household consumes]
+Features: [Building Type,Square Footage,Number of Occupants,Appliances Used,Average Temperature,Day of Week,Energy Consumption]
 """
 
 import pandas as pd
@@ -21,7 +21,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 import numpy as np
 
 # TODO: Update this with your actual filename
-DATA_FILE = 'your_data.csv'
+DATA_FILE = 'train_energy_data.csv'
 
 def load_and_explore_data(filename):
     """
@@ -34,13 +34,19 @@ def load_and_explore_data(filename):
     - Print summary statistics
     - Check for missing values
     """
-    print("=" * 70)
-    print("LOADING AND EXPLORING DATA")
-    print("=" * 70)
+    data = pd.read_csv(filename)
     
-    # Your code here
-    
-    pass
+    print("Hpuse price data")
+    print(f"\nFirst 7 rows:")
+    print(data.head())
+
+    print(f"\nDataset shape: {data.shape[0]} rows, {data.shape[1]} columns")
+
+    print(f"\nBasic statistics: ")
+    print(data.describe())
+    print(f"\nColumn names: {list(data.columns)}")
+
+    return data
 
 
 def visualize_data(data):
@@ -175,24 +181,24 @@ if __name__ == "__main__":
     # Step 1: Load and explore
     data = load_and_explore_data(DATA_FILE)
     
-    # Step 2: Visualize
-    visualize_data(data)
+    # # Step 2: Visualize
+    # visualize_data(data)
     
-    # Step 3: Prepare and split
-    X_train, X_test, y_train, y_test = prepare_and_split_data(data)
+    # # Step 3: Prepare and split
+    # X_train, X_test, y_train, y_test = prepare_and_split_data(data)
     
-    # Step 4: Train
-    model = train_model(X_train, y_train)
+    # # Step 4: Train
+    # model = train_model(X_train, y_train)
     
-    # Step 5: Evaluate
-    predictions = evaluate_model(model, X_test, y_test)
+    # # Step 5: Evaluate
+    # predictions = evaluate_model(model, X_test, y_test)
     
-    # Step 6: Make a prediction, add features as an argument
-    make_prediction(model)
+    # # Step 6: Make a prediction, add features as an argument
+    # make_prediction(model)
     
-    print("\n" + "=" * 70)
-    print("PROJECT COMPLETE!")
-    print("=" * 70)
+    # print("\n" + "=" * 70)
+    # print("PROJECT COMPLETE!")
+    # print("=" * 70)
     print("\nNext steps:")
     print("1. Analyze your results")
     print("2. Try improving your model (add/remove features)")
