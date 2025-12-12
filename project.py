@@ -9,7 +9,7 @@ Group Members:
 - 
 
 Dataset: [Energy Consumption]
-Predicting: [How much energy a household consumes]
+Predicting: [How much energy a Building consumes]
 Features: [Building Type,Square Footage,Number of Occupants,Appliances Used,Average Temperature,Day of Week,Energy Consumption]
 """
 
@@ -63,14 +63,57 @@ def visualize_data(data):
         feature_columns: list of feature column names
         target_column: name of target column
     """
-    print("\n" + "=" * 70)
-    print("VISUALIZING RELATIONSHIPS")
-    print("=" * 70)
     
+    # TODO: Create a figure with 2x2 subplots, size (12, 10)
+    fig, axes = plt.subplots(2,3,figsize=(12, 10))
+    # TODO: Add a main title: 'House Features vs Price'
+    fig.suptitle('House Features vs Price', fontsize = 16, fontweight = 'bold')
+   
+    axes[0,0].scatter(data['Building Type'], data['Energy Consumption'], color= 'blue', alpha=0.6) 
+    axes[0,0].set_xlabel('Building Type')
+    axes[0,0].set_ylabel('Energy Consumption(kWh)')
+    axes[0,0].set_title('Building Type vs Energy Consumption')
+    axes[0,0].grid(True, alpha=0.3)
+   
+    axes[0,1].scatter(data['Square Footage'], data['Energy Consumption'], color= 'green', alpha=0.6) 
+    axes[0,1].set_xlabel('Square Footage (sqrft)')
+    axes[0,1].set_ylabel('Energy Consumption(kWh)')
+    axes[0,1].set_title('SquareFootage vs Energy Consumption')
+    axes[0,1].grid(True, alpha=0.3)
+    
+    axes[1,0].scatter(data['Number of Occupants'], data['Energy Consumption'], color= 'red', alpha=0.6) 
+    axes[1,0].set_xlabel('Number of Occupants')
+    axes[1,0].set_ylabel('Energy Consumption(kWh)')
+    axes[1,0].set_title('Number of Occupants vs Energy Consumption')
+    axes[1,0].grid(True, alpha=0.3)
+    
+    axes[1,1].scatter(data['Appliances Used'], data['Energy Consumption'], color= 'orange', alpha=0.6) 
+    axes[1,1].set_xlabel('Appliances Used')
+    axes[1,1].set_ylabel('Energy Consumption(kWh)')
+    axes[1,1].set_title('Appliances Used vs Energy Consumption')
+    axes[1,1].grid(True, alpha=0.3)
+
+    axes[0,2].scatter(data['Average Temperature'], data['Energy Consumption'], color= 'yellow', alpha=0.6) 
+    axes[0,2].set_xlabel('Average Temperature (F)')
+    axes[0,2].set_ylabel('Energy Consumption(kWh)')
+    axes[0,2].set_title('Average Temperature vs Energy Consumption')
+    axes[0,2].grid(True, alpha=0.3)
+
+    axes[1,2].scatter(data['Day of Week'], data['Energy Consumption'], color= 'black', alpha=0.6) 
+    axes[1,2].set_xlabel('Day of Week')
+    axes[1,2].set_ylabel('Energy Consumption(kWh)')
+    axes[1,2].set_title('Day of Week vs Energy Consumption')
+    axes[1,2].grid(True, alpha=0.3)
+    # TODO: Use plt.tight_layout() to make plots fit nicely
+    plt.tight_layout()
+    # TODO: Save the figure as 'feature_plots.png' with dpi=300
+    plt.savefig('energy_data.png', dpi = 300, bbox_inches = 'tight')
+    print("\nFeature plots saved as 'energy_data.png'")
+    # TODO: Show the plot
+    plt.show()
+
     # Your code here
     # Hint: Use subplots like in Part 2!
-    
-    pass
 
 
 def prepare_and_split_data(data):
@@ -90,13 +133,31 @@ def prepare_and_split_data(data):
     Returns:
         X_train, X_test, y_train, y_test
     """
-    print("\n" + "=" * 70)
-    print("PREPARING AND SPLITTING DATA")
-    print("=" * 70)
+   # TODO: Create a list of feature column names
+    #       ['SquareFeet', 'Bedrooms', 'Bathrooms', 'Age']
+    feature_columns = ['Building Type','Square Footage', 'Number of Occupants', 'Appliances Used', 'Average Temperature', 'Day of Week']
+    # TODO: Create X by selecting those columns from data
+    X = data[feature_columns]
+    # TODO: Create y by selecting the 'Price' column
+    y = data['Energy Consumption']
+    # TODO: Print the shape of X and y
+    print(f"\n=== Feature Preparation ===")
+    print(f"Features (x) shape: {X.shape}")
+    print(f"Target (y) shape: {y.shape}")
     
-    # Your code here
-    
-    pass
+    # TODO: Print the feature column names
+    print(f"\nFeature columns: {list(X.columns)}")
+    # TODO: Return X and y
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 200, random_state = 42)
+
+    # TODO: Print how many samples are in training and testing sets
+    print(f"\n=== Data Split (Matching Unplugged Activity) ===")
+    print(f"Training set: {len(X_train)} samples")
+    print(f"Testing set: {len(X_test)} samples")
+    print(f"\nNOTE: We're NOT scaling features here so coefficients are easy to interpret!")
+    # TODO: Return X_train, X_test, y_train, y_test
+    return X_train, X_test, y_train, y_test
 
 
 def train_model(X_train, y_train):
@@ -181,11 +242,11 @@ if __name__ == "__main__":
     # Step 1: Load and explore
     data = load_and_explore_data(DATA_FILE)
     
-    # # Step 2: Visualize
-    # visualize_data(data)
+    # Step 2: Visualize
+    visualize_data(data)
     
-    # # Step 3: Prepare and split
-    # X_train, X_test, y_train, y_test = prepare_and_split_data(data)
+    # Step 3: Prepare and split
+    X_train, X_test, y_train, y_test = prepare_and_split_data(data)
     
     # # Step 4: Train
     # model = train_model(X_train, y_train)
