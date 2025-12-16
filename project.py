@@ -4,7 +4,7 @@ Assignment 6 Part 3
 
 Group Members:
 -Christopher Llinas-Aviles 
-- 
+- WenJun Ou
 - 
 - 
 
@@ -182,32 +182,45 @@ def train_model(X_train, y_train, feature_names):
     Returns:
         trained model
     """
-    # TODO: Create a LinearRegression model
+      print("\n" + "=" * 70)
+    print("TRAINING MODEL")
+    print("=" * 70)
+    
+    
     model = LinearRegression()
-    # TODO: Train the model using fit()
+   
     model.fit(X_train, y_train)
-    # TODO: Print the intercept
-    print(f"\n===Model Training Complete ===")
-    print(f"Intercept: kWh{model.intercept_:.2f}")
-    # TODO: Print each coefficient with its feature name
-    #       Hint: use zip(feature_names, model.coef_)
-    print(f"\nCoefficients:")
+    
+    print("\n✓ Model trained successfully!")
+    
+    # TODO: Print the equation with intercept and coefficients
+    print(f"\n=== Model Equation ===")
+    print(f"Energy Consumption = {model.intercept_:.2f}")
+    
+    feature_names = X_train.columns
     for name, coef in zip(feature_names, model.coef_):
-        print(f" {name}: {coef:.2f}")
-    # TODO: Print the full equation in readable format
-    print(f"\nEquation:")
-    equation = f"price = "
-    for i, (name, coef) in enumerate(zip(feature_names, model.coef_)):
-        if i == 0:
-            equation += f"{coef:.2f} x {name}"
-        else:
-            equation += f" + ({coef:.2f}) × {name}"
-    equation += f" + {model.intercept_:.2f}"
-    print(equation)
+        sign = "+" if coef >= 0 else ""
+        print(f"                     {sign} {coef:.2f} × {name}")
+    
+    # TODO: Calculate and display feature importance
+    print(f"\n=== Feature Importance (by coefficient magnitude) ===")
+    importance = pd.DataFrame({
+        'Feature': feature_names,
+        'Coefficient': model.coef_,
+        'Abs_Coefficient': np.abs(model.coef_)
+    }).sort_values('Abs_Coefficient', ascending=False)
+    
+    print("\nRanked from most to least important:")
+    for idx, row in importance.iterrows():
+        print(f"{row['Feature']:25s}: {row['Coefficient']:8.2f} (|{row['Abs_Coefficient']:.2f}|)")
+    
+    # TODO: Return the trained model
     return model
+    
+    pass
 
 
-def evaluate_model(model, X_test, y_test, feature_names):
+def evaluate_model(model, X_test, y_test):
     """
     Evaluate model performance
     
@@ -225,32 +238,48 @@ def evaluate_model(model, X_test, y_test, feature_names):
         
     Returns:
         predictions
-    """
-     # TODO: Make predictions on X_test
+     """
+    print("\n" + "=" * 70)
+    print("EVALUATING MODEL")
+    print("=" * 70)
+    
+    # TODO: Make predictions using the model
     predictions = model.predict(X_test)
-    # TODO: Calculate R² score
+    
+    # TODO: Calculate R² score using r2_score()
     r2 = r2_score(y_test, predictions)
-    # TODO: Calculate MSE and RMSE
-    mse = mean_squared_error(y_test, predictions)
-    rmse = np.sqrt(mse)
-    # TODO: Print R² score with interpretation
+    # TODO: Calculate RMSE using mean_squared_error() and np.sqrt()
+    rmse = np.sqrt(mean_squared_error(y_test, predictions))
+    
+    # TODO: Print the metrics with clear explanations
     print(f"\n=== Model Performance ===")
     print(f"R² Score: {r2:.4f}")
-    print(f"  → Model explains {r2*100:.2f}% of energy use variation")
-    # TODO: Print RMSE with interpretation
-    print(f"\nRoot Mean Squared Error: kWh{rmse:.2f}")
-    print(f"  → On average, predictions are off by kWh{rmse:.2f}")
-    # TODO: Calculate and print feature importance
-    #       Hint: Use np.abs(model.coef_) and sort by importance
-    #       Show which features matter most
-    print(f"\n === Feature Importance ===")
-    feature_importance = list(zip(feature_names, np.abs(model.coef_)))
-    feature_importance.sort(key=lambda x:x[1], reverse=True)
-
-    for i, (name, importance) in enumerate(feature_importance, 1):
-        print(f"{i}, {name}: {importance:.2F}")
-    # TODO: Return predictions
+    print(f"  → This means our model explains {r2*100:.2f}% of the variance in energy consumption")
+    print(f"\nRMSE: {rmse:.2f} kWh")
+    print(f"  → On average, our predictions are off by ±{rmse:.2f} kWh")
+    
+    # TODO: Create a comparison table showing actual vs predicted values
+    print(f"\n=== Actual vs Predicted (First 10 Examples) ===")
+    comparison = pd.DataFrame({
+        'Actual': y_test.values[:10],
+        'Predicted': predictions[:10],
+        'Error': y_test.values[:10] - predictions[:10]
+    })
+    comparison['Error %'] = (comparison['Error'] / comparison['Actual'] * 100).abs()
+    
+    print(comparison.to_string(index=False))
+    
+    # TODO: Calculate additional error statistics
+    mean_error = np.mean(np.abs(y_test - predictions))
+    mean_percent_error = np.mean(np.abs((y_test - predictions) / y_test) * 100)
+    
+    print(f"\n=== Overall Error Statistics ===")
+    print(f"Mean Absolute Error: {mean_error:.2f} kWh")
+    print(f"Mean Absolute Percent Error: {mean_percent_error:.2f}%")
+    
+    # TODO: Return the predictions
     return predictions
+    pass
 
 
 def make_prediction(model):
