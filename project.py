@@ -99,7 +99,7 @@ def visualize_data(data):
     axes[1,1].grid(True, alpha=0.3)
 
     axes[0,2].scatter(data['Average Temperature'], data['Energy Consumption'], color= 'yellow', alpha=0.6) 
-    axes[0,2].set_xlabel('Average Temperature (F)')
+    axes[0,2].set_xlabel('Average Temperature (C)')
     axes[0,2].set_ylabel('Energy Consumption(kWh)')
     axes[0,2].set_title('Average Temperature vs Energy Consumption')
     axes[0,2].grid(True, alpha=0.3)
@@ -182,7 +182,7 @@ def train_model(X_train, y_train, feature_names):
     Returns:
         trained model
     """
-      print("\n" + "=" * 70)
+    print("\n" + "=" * 70)
     print("TRAINING MODEL")
     print("=" * 70)
     
@@ -282,7 +282,7 @@ def evaluate_model(model, X_test, y_test):
     pass
 
 
-def make_prediction(model):
+def make_prediction(model,Building_Type,Square_Footage, Number_of_Occupants, Appliances_Used, Average_Temperature, Day_of_Week):
     """
     Make a prediction for a new example
     
@@ -303,7 +303,16 @@ def make_prediction(model):
     # Example: If predicting house price with [sqft, bedrooms, bathrooms]
     # sample = pd.DataFrame([[2000, 3, 2]], columns=feature_names)
     
-    pass
+    building_features = pd.DataFrame([[Building_Type,Square_Footage, Number_of_Occupants, Appliances_Used, Average_Temperature, Day_of_Week]], columns = ['Building Type','Square Footage', 'Number of Occupants', 'Appliances Used', 'Average Temperature', 'Day of Week'])
+    
+    # TODO: Make a prediction using model.predict()
+    predicted_energyuse = model.predict(building_features)[0]
+    # TODO: Print the house specs and predicted price nicely formatted
+    print(f"\n=== New Prediction ===")
+    print(f"building specs: {Building_Type:.0f} building type, {Square_Footage} Square feet, {Number_of_Occupants} people, {Appliances_Used} Appliances used, {Average_Temperature} Celcius, and {Day_of_Week}.")
+    print(f"Predicted energy use: kWh{predicted_energyuse:,.2f}")
+    # TODO: Return the predicted price
+    return predicted_energyuse
 
 
 if __name__ == "__main__":
@@ -320,10 +329,10 @@ if __name__ == "__main__":
     model = train_model(X_train, y_train,data.columns)
     
     # # Step 5: Evaluate
-    # predictions = evaluate_model(model, X_test, y_test)
+    predictions = evaluate_model(model, X_test, y_test)
     
     # # Step 6: Make a prediction, add features as an argument
-    # make_prediction(model)
+    make_prediction(model,0, 20000,40,40,30.00,0)
     
     # print("\n" + "=" * 70)
     # print("PROJECT COMPLETE!")
