@@ -279,7 +279,7 @@ def evaluate_model(model, X_test, y_test):
     
     # TODO: Return the predictions
     return predictions
-    pass
+    
 
 
 def make_prediction(model,Building_Type,Square_Footage, Number_of_Occupants, Appliances_Used, Average_Temperature, Day_of_Week):
@@ -314,6 +314,44 @@ def make_prediction(model,Building_Type,Square_Footage, Number_of_Occupants, App
     # TODO: Return the predicted price
     return predicted_energyuse
 
+def user_make_prediction(model):
+    """
+    Make a prediction for a new example
+    
+    TODO:
+    - Create a sample input (you choose the values!)
+    - Make a prediction
+    - Print the input values and predicted output
+    
+    Args:
+        model: trained model
+        feature_names: list of feature names
+    """
+    print("\n" + "=" * 70)
+    print("EXAMPLE PREDICTION")
+    print("=" * 70)
+    
+    # Your code here
+    # Example: If predicting house price with [sqft, bedrooms, bathrooms]
+    # sample = pd.DataFrame([[2000, 3, 2]], columns=feature_names)
+    print("Let's make our own prediction :D")
+    Building_Type = input("Building type (0 = Residential, 1 = commercial, 2 = industrial.)\n")
+    Square_Footage = input("Square Footage (max = 50,000)\n")
+    Number_of_Occupants = input("Number of occupants(max = 100)\n")
+    Appliances_Used = input("Appliances Used (Max = 50)\n")
+    Average_Temperature = input("Average temperature (Max= 35C )\n")
+    Day_of_Week = input("Day of week (0 = weeday, 1 = weekend.)\n")
+    building_features = pd.DataFrame([[Building_Type,Square_Footage, Number_of_Occupants, Appliances_Used, Average_Temperature, Day_of_Week]], columns = ['Building Type','Square Footage', 'Number of Occupants', 'Appliances Used', 'Average Temperature', 'Day of Week'])
+    
+    # TODO: Make a prediction using model.predict()
+    predicted_energyuse = model.predict(building_features)[0]
+    # TODO: Print the house specs and predicted price nicely formatted
+    print(f"\n=== New user Prediction ===")
+    print(f"building specs: {Building_Type} building type, {Square_Footage} Square feet, {Number_of_Occupants} people, {Appliances_Used} Appliances used, {Average_Temperature} Celcius, and {Day_of_Week}.")
+    print(f"Predicted energy use: kWh {predicted_energyuse:,.2f}")
+    # TODO: Return the predicted price
+    return predicted_energyuse
+
 
 if __name__ == "__main__":
     # Step 1: Load and explore
@@ -333,7 +371,7 @@ if __name__ == "__main__":
     
     # # Step 6: Make a prediction, add features as an argument
     make_prediction(model,0, 20000,40,40,30.00,0)
-    
+    user_make_prediction(model)
     # print("\n" + "=" * 70)
     # print("PROJECT COMPLETE!")
     # print("=" * 70)
