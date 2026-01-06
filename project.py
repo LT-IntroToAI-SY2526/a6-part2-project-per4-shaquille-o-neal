@@ -154,7 +154,7 @@ def prepare_and_split_data(data):
     print(f"\nFeature columns: {list(X.columns)}")
     # TODO: Return X and y
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 200, random_state = 42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 800, random_state = 201)
 
     # TODO: Print how many samples are in training and testing sets
     print(f"\n=== Data Split (Matching Unplugged Activity) ===")
