@@ -375,9 +375,4 @@ if __name__ == "__main__":
     # print("\n" + "=" * 70)
     # print("PROJECT COMPLETE!")
     # print("=" * 70)
-    print("\nNext steps:")
-    print("1. Analyze your results")
-    print("2. Try improving your model (add/remove features)")
-    print("3. Create your presentation")
-    print("4. Practice presenting with your group!")
 
